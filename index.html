@@ -141,6 +141,28 @@
 		output { font-size: 34px; font-weight: 700; overflow-wrap: anywhere; }
 		output.error { color: #a53e2e; font-size: 15px; }
 
+		#result-surprise {
+			display: block;
+			margin: 20px 0 0;
+		}
+
+		#result-surprise figcaption {
+			color: var(--muted);
+			font-size: 17px;
+			font-weight: 700;
+		}
+
+		#result-image {
+			width: 100%;
+			max-height: 420px;
+			margin-top: 10px;
+			border: 1px solid var(--line);
+			border-radius: 5px;
+			object-fit: contain;
+		}
+
+		#result-surprise[hidden] { display: none; }
+
 		.key {
 			margin: 17px 0 0;
 			color: var(--muted);
@@ -201,12 +223,17 @@
 				<span class="result-label">Result</span>
 				<output id="answer" for="first-number operation second-number">Your answer will appear here</output>
 			</div>
+			<figure id="result-surprise" hidden>
+				<figcaption>A little surprise for getting 67!</figcaption>
+				<img id="result-image" src="panorama_overlay.png" alt="Five anime characters in colorful outfits">
+			</figure>
 			<p class="key"><strong>Operation key:</strong> a = add, s = subtract, m = multiply, d = divide, e = exponent</p>
 		</form>
 	</main>
 	<script>
 		const form = document.querySelector("#calculator");
 		const answer = document.querySelector("#answer");
+		const resultSurprise = document.querySelector("#result-surprise");
 
 		form.addEventListener("submit", (event) => {
 			event.preventDefault();
@@ -235,12 +262,15 @@
 			}
 
 			answer.classList.remove("error");
-			answer.textContent = Number(result.toPrecision(12)).toString();
+			const displayedResult = Number(result.toPrecision(12));
+			answer.textContent = displayedResult.toString();
+			resultSurprise.hidden = displayedResult !== 67;
 		});
 
 		function showError(message) {
 			answer.classList.add("error");
 			answer.textContent = message;
+			resultSurprise.hidden = true;
 		}
 	</script>
 </body>
